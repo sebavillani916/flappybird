@@ -18,6 +18,7 @@ pygame.display.set_caption("Flappy Bird")
 bird_img = pygame.image.load("images/bluebird-downflap.png").convert() 
 pipe_img = pygame.image.load("images/pipe-green.png").convert()
 background_img = pygame.image.load("images/background-day.png").convert()
+floor_img = pygame.image.load("images/base.png").convert()  # Load floor image
 
 # Bird class
 class Bird:
@@ -35,8 +36,9 @@ class Bird:
         self.velocity += self.gravity
         self.y += self.velocity
 
-        if self.y > HEIGHT - 40:
-            self.y = HEIGHT - 40
+        # Adjust for floor collision
+        if self.y > HEIGHT - 100 - 40:  # Assuming 40 is the bird's height
+            self.y = HEIGHT - 100 - 40
             self.velocity = 0
         if self.y < 0:
             self.y = 0
@@ -68,6 +70,7 @@ class Pipe:
 bird = Bird()
 pipes = []
 score = 0
+floor_height = 100  # Define the floor height
 
 # Main game loop
 running = True
@@ -111,6 +114,7 @@ while running:
     bird.show()
     for pipe in pipes:
         pipe.show()
+    screen.blit(floor_img, (0, HEIGHT - floor_height))  # Draw the floor
 
     # Display score
     font = pygame.font.Font(None, 36)
