@@ -17,6 +17,7 @@ pygame.display.set_caption("Flappy Bird")
 # Load images
 bird_img = pygame.image.load("images/jerry.png").convert() 
 pipe_img = pygame.image.load("images/pipes.png").convert()
+background_img = pygame.image.load("images/background-day.png").convert()
 
 # Bird class
 class Bird:
@@ -106,7 +107,7 @@ while running:
             pipes.remove(pipe)
 
     # Draw everything
-    screen.fill(WHITE)
+    screen.blit(background_img, (0, 0))  # Draw the background first
     bird.show()
     for pipe in pipes:
         pipe.show()
