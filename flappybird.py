@@ -53,7 +53,7 @@ class Bird:
      # Check for ceiling collision
         if self.y < 0:
             self.y = 0
-            self.velocity = 
+            self.velocity = 0
 
     def jump(self):
         self.velocity += self.lift
