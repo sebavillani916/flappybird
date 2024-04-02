@@ -98,6 +98,10 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 bird.jump()
+        elif event.type == pygame.MOUSEBUTTONDOWN:  # Check for mouse button clicks
+            bird.jump()  # Make the bird jump on mouse click
+
+
 
     # Check for collisions
     for pipe in pipes:
