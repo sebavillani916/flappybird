@@ -17,8 +17,14 @@ pygame.display.set_caption("Flappy Bird")
 # Load images
 bird_img = pygame.image.load("images/bluebird-downflap.png").convert() 
 pipe_img = pygame.image.load("images/pipe-green.png").convert()
+# Load and scale the background image to fit the screen
 background_img = pygame.image.load("images/background-day.png").convert()
-floor_img = pygame.image.load("images/base.png").convert()  # Load floor image
+background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
+# Load and scale the floor image to fit the screen width
+floor_img = pygame.image.load("images/base.png").convert()
+floor_height = 100  # Set the desired height for the floor area
+floor_img = pygame.transform.scale(floor_img, (WIDTH, floor_height))
+
 
 # Bird class
 class Bird:
@@ -50,15 +56,19 @@ class Bird:
 # Pipe class
 class Pipe:
     def __init__(self):
-        self.top = random.randint(50, HEIGHT - 250)
-        self.bottom = HEIGHT - self.top - 200
+        self.top = random.randint(50, HEIGHT - 250 - 100)  # Adjusted to ensure top pipes do not stretch out of the screen
+        self.bottom = HEIGHT - self.top - 200  # Adjusted to ensure bottom pipes do not appear under the background
         self.x = WIDTH
         self.width = 40
         self.speed = 3
 
     def show(self):
-        screen.blit(pipe_img, (self.x, 0), (0, 0, self.width, self.top))
-        screen.blit(pipe_img, (self.x, HEIGHT - self.bottom), (0, pipe_img.get_height() - self.bottom, self.width, self.bottom))
+        # Top pipe
+        top_pipe_img = pygame.transform.flip(pipe_img, False, True)  # Flip the pipe image for the top pipe
+        screen.blit(top_pipe_img, (self.x, self.top - top_pipe_img.get_height()))
+
+        # Bottom pipe
+        screen.blit(pipe_img, (self.x, HEIGHT - self.bottom))
 
     def update(self):
         self.x -= self.speed
@@ -125,3 +135,6 @@ while running:
     clock.tick(60)
 
 pygame.quit()
+
+
+
