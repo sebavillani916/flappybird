@@ -28,6 +28,7 @@ floor_img = pygame.transform.scale(floor_img, (WIDTH, floor_height))
 game_over_img = pygame.image.load("images/gameover.png").convert_alpha()
 game_over_img = pygame.transform.scale(game_over_img, (300, 80))  
 
+
 def title_screen():
     play_button_img = pygame.image.load("images/play_button.png").convert_alpha()  # Load play button image
     # Scale the play button image
@@ -115,8 +116,8 @@ class Pipe:
 def game_over_screen():
     restart_button_img = pygame.image.load("images/play_again.png").convert_alpha()
     restart_button_img = pygame.transform.scale(restart_button_img, (200, 60))
-    restart_button_rect = restart_button_img.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 100))
-    game_over_rect = game_over_img.get_rect(center=(WIDTH // 2, restart_button_rect.top - 90))  # Adjust the vertical offset as needed
+    restart_button_rect = restart_button_img.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 80))
+    game_over_rect = game_over_img.get_rect(center=(WIDTH // 2, restart_button_rect.top - 100))  # Adjust the vertical offset as needed
 
     while True:
         for event in pygame.event.get():
