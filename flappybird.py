@@ -24,6 +24,9 @@ background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
 floor_img = pygame.image.load("images/base.png").convert()
 floor_height = 100  # Set the desired height for the floor area
 floor_img = pygame.transform.scale(floor_img, (WIDTH, floor_height))
+# Load the game over image
+game_over_img = pygame.image.load("images/gameover.png").convert_alpha()
+game_over_img = pygame.transform.scale(game_over_img, (300, 80))  
 
 def title_screen():
     play_button_img = pygame.image.load("images/play_button.png").convert_alpha()  # Load play button image
@@ -109,11 +112,33 @@ class Pipe:
     def offscreen(self):
         return self.x < -self.width
 
+def game_over_screen():
+    restart_button_img = pygame.image.load("images/play_again.png").convert_alpha()
+    restart_button_img = pygame.transform.scale(restart_button_img, (200, 60))
+    restart_button_rect = restart_button_img.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 100))
+    game_over_rect = game_over_img.get_rect(center=(WIDTH // 2, restart_button_rect.top - 90))  # Adjust the vertical offset as needed
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if restart_button_rect.collidepoint(event.pos):
+                    return  # Exit the function to restart the game immediately
+
+        screen.blit(background_img, (0, 0))
+        screen.blit(game_over_img, game_over_rect)  # Display the game over image
+        screen.blit(restart_button_img, restart_button_rect)
+        pygame.display.flip()
+        clock.tick(60)
+
 # Game variables
 bird = Bird()
 pipes = []
 score = 0
 floor_height = 100  # Define the floor height
+game_over = False
 
 # Main game loop
 running = True
@@ -122,6 +147,15 @@ clock = pygame.time.Clock()
 title_screen()  # Display the title screen before starting the game loop
 
 while running:
+    if game_over:
+        game_over_screen()  
+        bird = Bird()
+        pipes = []
+        score = 0
+        game_over = False
+        # Removed the call to title_screen()
+        continue  # Continue with the next iteration of the loop, effectively restarting the game
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -131,32 +165,29 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:  # Check for mouse button clicks
             bird.jump()  # Make the bird jump on mouse click
 
+    if not game_over:
+        # Check for collisions
+        for pipe in pipes:
+            if bird.x + bird_img.get_width() > pipe.x and bird.x < pipe.x + pipe.width:
+                if bird.y < pipe.top or bird.y + bird_img.get_height() > HEIGHT - pipe.bottom:
+                    game_over = True
+                    break
 
+            if pipe.x == bird.x - pipe.width:
+                score += 1
 
-    # Check for collisions
-    for pipe in pipes:
-        if bird.x + bird_img.get_width() > pipe.x and bird.x < pipe.x + pipe.width:
-            if bird.y < pipe.top or bird.y + bird_img.get_height() > HEIGHT - pipe.bottom:
-                # running = False
-                # break
-                print("hit pipe")
-                pass
+        # Update bird
+        bird.update()
 
-        if pipe.x == bird.x - pipe.width:
-            score += 1
+        # Generate pipes
+        if len(pipes) == 0 or pipes[-1].x < WIDTH - 150:
+            pipes.append(Pipe())
 
-    # Update bird
-    bird.update()
-
-    # Generate pipes
-    if len(pipes) == 0 or pipes[-1].x < WIDTH - 150:
-        pipes.append(Pipe())
-
-    # Update pipes 
-    for pipe in pipes:
-        pipe.update()
-        if pipe.offscreen():
-            pipes.remove(pipe)
+        # Update pipes 
+        for pipe in pipes:
+            pipe.update()
+            if pipe.offscreen():
+                pipes.remove(pipe)
 
     # Draw everything
     screen.blit(background_img, (0, 0))  # Draw the background first
