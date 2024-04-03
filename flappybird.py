@@ -25,9 +25,30 @@ floor_img = pygame.image.load("images/base.png").convert()
 floor_height = 100  # Set the desired height for the floor area
 floor_img = pygame.transform.scale(floor_img, (WIDTH, floor_height))
 # Load the game over image
-game_over_img = pygame.image.load("images/gameover.png").convert_alpha()
-game_over_img = pygame.transform.scale(game_over_img, (300, 80))  
+game_over_img = pygame.image.load("images/scoreboard.png").convert_alpha()
+game_over_img = pygame.transform.scale(game_over_img, (300, 400))  
 
+def read_high_score():
+    try:
+        with open("high_score.txt", "r") as f:
+            high_score_str = f.read().strip()
+            if high_score_str:
+                return int(high_score_str)
+            else:
+                return 0
+    except FileNotFoundError:
+        return 0
+    except ValueError:
+        return 0
+
+high_score = read_high_score()
+
+def update_high_score(new_score):
+    global high_score
+    if new_score > high_score:
+        high_score = new_score
+        with open("high_score.txt", "w") as f:
+            f.write(str(high_score))
 
 def title_screen():
     play_button_img = pygame.image.load("images/play_button.png").convert_alpha()  # Load play button image
@@ -114,6 +135,7 @@ class Pipe:
         return self.x < -self.width
 
 def game_over_screen():
+    global high_score
     restart_button_img = pygame.image.load("images/play_again.png").convert_alpha()
     restart_button_img = pygame.transform.scale(restart_button_img, (200, 60))
     restart_button_rect = restart_button_img.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 80))
@@ -131,6 +153,15 @@ def game_over_screen():
         screen.blit(background_img, (0, 0))
         screen.blit(game_over_img, game_over_rect)  # Display the game over image
         screen.blit(restart_button_img, restart_button_rect)
+        
+       # Display the high score inside the scoreboard image
+        high_score_font = pygame.font.Font(None, 36)
+        high_score_text = high_score_font.render(str(high_score), True, BLACK)
+        high_score_rect = high_score_text.get_rect(center=(WIDTH // 2 + 89, game_over_rect.top + 165))  # Adjust the x-coordinate to move the text to the right
+
+        screen.blit(high_score_text, high_score_rect)
+
+
         pygame.display.flip()
         clock.tick(60)
 
@@ -149,6 +180,7 @@ title_screen()  # Display the title screen before starting the game loop
 
 while running:
     if game_over:
+        update_high_score(score)
         game_over_screen()  
         bird = Bird()
         pipes = []
