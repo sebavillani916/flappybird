@@ -25,6 +25,34 @@ floor_img = pygame.image.load("images/base.png").convert()
 floor_height = 100  # Set the desired height for the floor area
 floor_img = pygame.transform.scale(floor_img, (WIDTH, floor_height))
 
+def title_screen():
+    play_button_img = pygame.image.load("images/play_button.png").convert_alpha()  # Load play button image
+    # Scale the play button image
+    play_button_img = pygame.transform.scale(play_button_img, (200, 90))
+    play_button_rect = play_button_img.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 100))  # Position the play button
+
+    title_image = pygame.image.load("images/logo.png").convert_alpha()  # Load title image
+    title_image = pygame.transform.scale(title_image, (350, 130))  # Scale the title image (adjust size as needed)
+    title_rect = title_image.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 100))  # Position the title image above the play button
+
+
+    title_running = True
+    while title_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                title_running = False
+                pygame.quit()
+                exit()  # Exit the game if the close button is clicked
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if play_button_rect.collidepoint(event.pos):
+                    title_running = False  # Exit the title screen loop to start the game
+
+        screen.blit(background_img, (0, 0))  # Use the same background for the title screen
+        screen.blit(title_image, title_rect)  # Draw the title image
+        screen.blit(play_button_img, play_button_rect)  # Draw the play button
+
+        pygame.display.flip()
+        clock.tick(60)
 
 # Bird class
 class Bird:
@@ -91,6 +119,8 @@ floor_height = 100  # Define the floor height
 running = True
 clock = pygame.time.Clock()
 
+title_screen()  # Display the title screen before starting the game loop
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -144,6 +174,3 @@ while running:
     clock.tick(60)
 
 pygame.quit()
-
-
-
