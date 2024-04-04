@@ -28,6 +28,10 @@ floor_img = pygame.transform.scale(floor_img, (WIDTH, floor_height))
 game_over_img = pygame.image.load("images/scoreboard.png").convert_alpha()
 game_over_img = pygame.transform.scale(game_over_img, (300, 400))  
 
+# Load sound files
+wing_sound = pygame.mixer.Sound("sound/sfx_wing.wav")
+swoosh_sound = pygame.mixer.Sound("sound/sfx_swooshing.wav")
+
 def read_high_score():
     try:
         with open("high_score.txt", "r") as f:
@@ -110,6 +114,7 @@ class Bird:
 
     def jump(self):
         self.velocity += self.lift
+        wing_sound.play()  # Play wing sound when the bird jumps
 
 # Pipe class
 class Pipe:
@@ -195,8 +200,10 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 bird.jump()
+                wing_sound.play()  # Play wing sound when the bird jumps
         elif event.type == pygame.MOUSEBUTTONDOWN:  # Check for mouse button clicks
             bird.jump()  # Make the bird jump on mouse click
+            wing_sound.play()  # Play wing sound when the bird jumps
 
     if not game_over:
         # Check for collisions
