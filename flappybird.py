@@ -19,6 +19,7 @@ bird_img = pygame.image.load("images/bluebird-downflap.png").convert()
 birdYellow_img = pygame.image.load("images/yellowbird-upflap.png").convert() 
 birdRed_img = pygame.image.load("images/redbird-upflap.png").convert() 
 
+
 bird_img = random.choice([bird_img, birdYellow_img, birdRed_img])
 
 pipe_img = pygame.image.load("images/pipe-green.png").convert()
@@ -85,8 +86,8 @@ def title_screen():
     play_button_rect = play_button_img.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 100))  # Position the play button
 
     title_image = pygame.image.load("images/logo.png").convert_alpha()  # Load title image
-    title_image = pygame.transform.scale(title_image, (350, 130))  # Scale the title image (adjust size as needed)
-    title_rect = title_image.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 100))  # Position the title image above the play button
+    title_image = pygame.transform.scale(title_image, (350, 110))  # Scale the title image (adjust size as needed)
+    title_rect = title_image.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 70))  # Position the title image above the play button
 
 
     title_running = True
