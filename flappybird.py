@@ -5,7 +5,7 @@ import random
 pygame.init()
 
 # Screen dimensions
-WIDTH, HEIGHT = 400, 600
+WIDTH, HEIGHT = 800, 600
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -257,6 +257,7 @@ while running:
             pipe.update()
             if pipe.offscreen():
                 pipes.remove(pipe)
+                score+=1
 
     # Draw everything
     screen.blit(background_img, (0, 0))  # Draw the background first
