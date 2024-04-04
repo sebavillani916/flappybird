@@ -17,13 +17,16 @@ pygame.display.set_caption("Flappy Bird")
 # Load images
 bird_img = pygame.image.load("images/bluebird-downflap.png").convert() 
 pipe_img = pygame.image.load("images/pipe-green.png").convert()
+
 # Load and scale the background image to fit the screen
 background_img = pygame.image.load("images/background-day.png").convert()
 background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
+
 # Load and scale the floor image to fit the screen width
 floor_img = pygame.image.load("images/base.png").convert()
 floor_height = 100  # Set the desired height for the floor area
 floor_img = pygame.transform.scale(floor_img, (WIDTH, floor_height))
+
 # Load the game over image
 game_over_img = pygame.image.load("images/scoreboard.png").convert_alpha()
 game_over_img = pygame.transform.scale(game_over_img, (300, 400))  
@@ -31,6 +34,16 @@ game_over_img = pygame.transform.scale(game_over_img, (300, 400))
 # Load sound files
 wing_sound = pygame.mixer.Sound("sound/sfx_wing.wav")
 swoosh_sound = pygame.mixer.Sound("sound/sfx_swooshing.wav")
+hit_sound = pygame.mixer.Sound("sound/sfx_hit.wav")
+die_sound = pygame.mixer.Sound("sound/sfx_die.wav")
+point_sound = pygame.mixer.Sound("sound/sfx_point.wav")
+
+# Set volume levels
+wing_sound.set_volume(0.3)  
+swoosh_sound.set_volume(0.3)  
+hit_sound.set_volume(0.3)  
+die_sound.set_volume(0.3)  
+point_sound.set_volume(0.3)  
 
 def read_high_score():
     try:
@@ -115,6 +128,7 @@ class Bird:
     def jump(self):
         self.velocity += self.lift
         wing_sound.play()  # Play wing sound when the bird jumps
+        swoosh_sound.play()  # Play swooshing sound when the bird jumps
 
 # Pipe class
 class Pipe:
@@ -211,10 +225,13 @@ while running:
             if bird.x + bird_img.get_width() > pipe.x and bird.x < pipe.x + pipe.width:
                 if bird.y < pipe.top or bird.y + bird_img.get_height() > HEIGHT - pipe.bottom:
                     game_over = True
+                    hit_sound.play()  # Play hit sound when the bird collides with the pipes
+                    die_sound.play()  # Play die sound when the game is over
                     break
 
             if pipe.x == bird.x - pipe.width:
                 score += 1
+                point_sound.play()  # Play point sound when the bird gets a point
 
         # Update bird
         bird.update()
@@ -244,4 +261,4 @@ while running:
     pygame.display.flip()
     clock.tick(60)
 
-pygame.quit()
+pygame.quit
