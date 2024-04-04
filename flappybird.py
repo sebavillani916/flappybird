@@ -16,11 +16,22 @@ pygame.display.set_caption("Flappy Bird")
 
 # Load images
 bird_img = pygame.image.load("images/bluebird-downflap.png").convert() 
+birdYellow_img = pygame.image.load("images/yellowbird-upflap.png").convert() 
+birdRed_img = pygame.image.load("images/redbird-upflap.png").convert() 
+
+bird_img = random.choice([bird_img, birdYellow_img, birdRed_img])
+
 pipe_img = pygame.image.load("images/pipe-green.png").convert()
 
 # Load and scale the background image to fit the screen
 background_img = pygame.image.load("images/background-day.png").convert()
 background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
+
+backgroundN_img = pygame.image.load("images/background-night.png").convert()
+backgroundN_img = pygame.transform.scale(backgroundN_img, (WIDTH, HEIGHT))
+
+# Randomly select day or night background
+background_img = random.choice([background_img, backgroundN_img])
 
 # Load and scale the floor image to fit the screen width
 floor_img = pygame.image.load("images/base.png").convert()
